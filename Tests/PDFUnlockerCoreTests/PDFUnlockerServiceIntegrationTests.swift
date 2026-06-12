@@ -8,22 +8,61 @@ final class PDFUnlockerServiceIntegrationTests: XCTestCase {
             throw XCTSkip("qpdf is not installed")
         }
 
+        let fixture = try makeEncryptedFixture(qpdfURL: qpdfURL)
+        defer { try? FileManager.default.removeItem(at: fixture.directory) }
+
+        let result = try await PDFUnlockerService().unlockPDF(inputURL: fixture.encryptedURL, password: "secret")
+        XCTAssertEqual(result.outputURL.lastPathComponent, "lecture-unlock.pdf")
+
+        let encryptionStatus = try run(qpdfURL, arguments: ["--show-encryption", result.outputURL.path])
+        XCTAssertTrue(encryptionStatus.contains("File is not encrypted"))
+    }
+
+    func testReportsPasswordRequiredWhenPasswordIsMissing() async throws {
+        let dependency = QPDFDependency.detect()
+        guard let qpdfURL = dependency.executableURL else {
+            throw XCTSkip("qpdf is not installed")
+        }
+
+        let fixture = try makeEncryptedFixture(qpdfURL: qpdfURL)
+        defer { try? FileManager.default.removeItem(at: fixture.directory) }
+
+        do {
+            _ = try await PDFUnlockerService().unlockPDF(inputURL: fixture.encryptedURL, password: nil)
+            XCTFail("Expected passwordRequired")
+        } catch let error as PDFUnlockerService.ServiceError {
+            XCTAssertEqual(error, .passwordRequired("lecture.pdf"))
+        }
+    }
+
+    func testReportsInvalidPasswordWhenPasswordIsWrong() async throws {
+        let dependency = QPDFDependency.detect()
+        guard let qpdfURL = dependency.executableURL else {
+            throw XCTSkip("qpdf is not installed")
+        }
+
+        let fixture = try makeEncryptedFixture(qpdfURL: qpdfURL)
+        defer { try? FileManager.default.removeItem(at: fixture.directory) }
+
+        do {
+            _ = try await PDFUnlockerService().unlockPDF(inputURL: fixture.encryptedURL, password: "wrong")
+            XCTFail("Expected invalidPassword")
+        } catch let error as PDFUnlockerService.ServiceError {
+            XCTAssertEqual(error, .invalidPassword("lecture.pdf"))
+        }
+    }
+
+    private func makeEncryptedFixture(qpdfURL: URL) throws -> (directory: URL, encryptedURL: URL) {
         let directory = FileManager.default.temporaryDirectory
             .appendingPathComponent(UUID().uuidString, isDirectory: true)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        defer { try? FileManager.default.removeItem(at: directory) }
 
         let plainURL = directory.appendingPathComponent("plain.pdf")
         let encryptedURL = directory.appendingPathComponent("lecture.pdf")
 
         try run(qpdfURL, arguments: ["--empty", plainURL.path])
         try run(qpdfURL, arguments: ["--encrypt", "secret", "owner", "256", "--", plainURL.path, encryptedURL.path])
-
-        let result = try await PDFUnlockerService().unlockPDF(inputURL: encryptedURL, password: "secret")
-        XCTAssertEqual(result.outputURL.lastPathComponent, "lecture-unlock.pdf")
-
-        let encryptionStatus = try run(qpdfURL, arguments: ["--show-encryption", result.outputURL.path])
-        XCTAssertTrue(encryptionStatus.contains("File is not encrypted"))
+        return (directory, encryptedURL)
     }
 
     @discardableResult

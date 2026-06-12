@@ -11,7 +11,7 @@ PDF Unlocker is a SwiftUI wrapper around [`qpdf`](https://qpdf.sourceforge.io/),
 | Drag and drop | Drop one or more PDF files from Finder. |
 | File picker | Use `Command-O` or the `Choose PDF` button. |
 | Predictable output | Saves beside the source file as `{filename}-unlock.pdf`; existing files are preserved with `-unlock-2`, `-unlock-3`, and so on. |
-| Optional password | Supports PDFs that require a known open password. |
+| Optional password | Supports PDFs that require a known open password and clearly reports missing or incorrect passwords. |
 | qpdf detection | Checks common Homebrew paths and the app launch environment. |
 | Local-first | No upload, account, or network service is used for PDF processing. |
 
@@ -29,7 +29,7 @@ brew install qpdf
 
 ## Install
 
-Download `PDFUnlocker.dmg` from the latest release, open it, and drag **PDF Unlocker.app** into **Applications**. Current release: `v0.1.1`.
+Download `PDFUnlocker.dmg` from the latest release, open it, and drag **PDF Unlocker.app** into **Applications**. Current release: `v0.1.2`.
 
 If macOS warns that the app is from an unidentified developer, right-click the app in Finder, choose **Open**, and confirm once. The current local build is ad-hoc signed for direct distribution testing.
 
@@ -51,7 +51,7 @@ lecture1_intro.pdf -> lecture1_intro-unlock.pdf
 
 PDF Unlocker can remove encryption restrictions when qpdf can legally transform the file, including PDFs that open normally but block copying, printing, or editing. For user-password protected PDFs, you must provide the correct password.
 
-PDF Unlocker is not a password recovery tool and should only be used for files you own, created, received with permission, or are otherwise authorized to modify.
+PDF Unlocker is not a password recovery tool. If the PDF needs an unknown password, the app reports that clearly instead of attempting recovery. Use it only for files you own, created, received with permission, or are otherwise authorized to modify.
 
 ## Build From Source
 

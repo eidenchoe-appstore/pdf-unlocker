@@ -1,0 +1,3 @@
+[actions.Run]
+command = "./script/build_and_run.sh"
+working_directory = "."

@@ -1,14 +1,12 @@
 {
-  "fill" : {
-    "automatic-gradient" : "extended-srgb:0.00000,0.47843,1.00000,1.00000"
-  },
+  "fill" : "automatic",
   "groups" : [
     {
       "layers" : [
         {
           "glass" : false,
-          "image-name" : "icon copy.png",
-          "name" : "icon copy"
+          "image-name" : "ChatGPT Image 2026년 6월 12일 오후 03_13_50.png",
+          "name" : "ChatGPT Image 2026년 6월 12일 오후 03_13_50"
         }
       ],
       "shadow" : {

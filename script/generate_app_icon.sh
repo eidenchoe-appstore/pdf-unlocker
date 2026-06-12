@@ -2,10 +2,22 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SOURCE_ICON="$ROOT_DIR/icon.icon/Assets/icon copy.png"
+ICON_JSON="$ROOT_DIR/icon.icon/icon.json"
+ASSETS_DIR="$ROOT_DIR/icon.icon/Assets"
 ICONSET_DIR="$ROOT_DIR/dist/AppIcon.iconset"
 OUTPUT_DIR="$ROOT_DIR/Resources"
 OUTPUT_ICON="$OUTPUT_DIR/AppIcon.icns"
+
+IMAGE_NAME=""
+if [[ -f "$ICON_JSON" ]]; then
+  IMAGE_NAME="$(plutil -extract groups.0.layers.0.image-name raw -o - "$ICON_JSON" 2>/dev/null || true)"
+fi
+
+if [[ -n "$IMAGE_NAME" ]]; then
+  SOURCE_ICON="$ASSETS_DIR/$IMAGE_NAME"
+else
+  SOURCE_ICON="$(find "$ASSETS_DIR" -maxdepth 1 -type f -iname '*.png' -print -quit)"
+fi
 
 if [[ ! -f "$SOURCE_ICON" ]]; then
   echo "Missing source icon: $SOURCE_ICON" >&2

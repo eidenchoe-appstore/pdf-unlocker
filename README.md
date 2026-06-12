@@ -29,7 +29,7 @@ brew install qpdf
 
 ## Install
 
-Download `PDFUnlocker.dmg` from the latest release, open it, and drag **PDF Unlocker.app** into **Applications**.
+Download `PDFUnlocker.dmg` from the latest release, open it, and drag **PDF Unlocker.app** into **Applications**. Current release: `v0.1.1`.
 
 If macOS warns that the app is from an unidentified developer, right-click the app in Finder, choose **Open**, and confirm once. The current local build is ad-hoc signed for direct distribution testing.
 
@@ -70,6 +70,7 @@ The packaged app and DMG are written to `dist/`.
 
 - App source: `Sources/PDFUnlocker`
 - qpdf service and naming logic: `Sources/PDFUnlockerCore`
+- App icon source: `icon.icon`
 - Tests: `Tests/PDFUnlockerCoreTests`
 - Local run script: `script/build_and_run.sh`
 - DMG packaging script: `script/package_dmg.sh`

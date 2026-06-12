@@ -1,4 +1,9 @@
-# PDF Unlocker
+<h1>
+  <img src="Resources/READMEIcon.png" width="44" align="center" alt="PDF Unlocker icon">
+  PDF Unlocker
+</h1>
+
+[한국어](README.ko.md) | English
 
 A small macOS utility for removing PDF encryption restrictions from documents you own or are allowed to modify. Drag a PDF into the app, or choose one from Finder, and PDF Unlocker saves a new file next to the original using the `{filename}-unlock.pdf` naming pattern.
 
@@ -71,6 +76,8 @@ The packaged app and DMG are written to `dist/`.
 - App source: `Sources/PDFUnlocker`
 - qpdf service and naming logic: `Sources/PDFUnlockerCore`
 - App icon source: `icon.icon`
+- README icon: `Resources/READMEIcon.png`
+- Korean documentation: `README.ko.md`
 - Tests: `Tests/PDFUnlockerCoreTests`
 - Local run script: `script/build_and_run.sh`
 - DMG packaging script: `script/package_dmg.sh`
